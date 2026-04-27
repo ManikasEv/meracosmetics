@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("https://www.meracosmetics.ch/_woff/v2/CormorantGaramond-Regular_2/CormorantGaramond-Regular_2-english.woff2")
+    format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cormorant Garamond";
+  src: url("https://www.meracosmetics.ch/_woff/v2/CormorantGaramond-Medium_2/CormorantGaramond-Medium_2-english.woff2")
+    format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+  Four typographic levels — use only these classes sitewide:
+  L1 .type-title     — page hero & major section titles (h1, primary h2)
+  L2 .type-subtitle  — secondary headings, card titles, lead / emphasis lines
+  L3 .type-text      — body copy, nav links (sentence case), contact details
+  L4 .type-ui        — uppercase labels, pills, tabs, duration/meta (pair with uppercase)
+*/
+:root {
+  --mera-serif: "Cormorant Garamond", serif;
+  --type-title: clamp(1.35rem, 1.5vw + 0.65rem, 1.85rem);
+  --type-subtitle: clamp(0.92rem, 0.45vw + 0.72rem, 1.08rem);
+  --type-text: clamp(0.74rem, 0.22vw + 0.68rem, 0.84rem);
+  --type-ui: clamp(0.54rem, 0.15vw + 0.48rem, 0.62rem);
+}
+
+.font-serif {
+  font-family: var(--mera-serif);
+}
+
+.type-title {
+  font-size: var(--type-title);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.type-subtitle {
+  font-size: var(--type-subtitle);
+  line-height: 1.34;
+  letter-spacing: -0.012em;
+}
+
+.type-text {
+  font-size: var(--type-text);
+  line-height: 1.62;
+  letter-spacing: 0.01em;
+}
+
+.type-ui {
+  font-size: var(--type-ui);
+  line-height: 1.38;
+  letter-spacing: 0.01em;
+}
+
+/* Uppercase UI: one shared tracking value for symmetry */
+.type-ui.uppercase {
+  letter-spacing: 0.14em;
+}
+
+/* Primary pill: subtle shine sweep on hover */
+.btn-mera-pill {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-mera-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-120%) skewX(-12deg);
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 250, 245, 0.35) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+
+.btn-mera-pill:hover::after {
+  opacity: 1;
+  animation: mera-pill-shine 0.85s ease forwards;
+}
+
+@keyframes mera-pill-shine {
+  0% {
+    transform: translateX(-120%) skewX(-12deg);
+  }
+  100% {
+    transform: translateX(120%) skewX(-12deg);
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #fff;
+  color: #4a3f35;
+  overflow-x: hidden;
+  font-size: var(--type-text);
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
