@@ -8,25 +8,25 @@ function HomePage({ language }) {
 
   const seo = {
     de: {
-      title: 'MERA Cosmetics in Dietikon',
+      title: 'MERA Cosmetics in Zürich',
       description:
-        'Privater Rückzugsort für Ästhetik, Maniküre, Pediküre, Waxing und Körperbehandlungen in Dietikon. Buche deinen Termin bei MERA Cosmetics.',
+        'Privater Rückzugsort für Ästhetik, Maniküre, Pediküre, Waxing und Körperbehandlungen in Zürich. Buche deinen Termin bei MERA Cosmetics.',
       keywords:
-        'MERA Cosmetics, Kosmetik Dietikon, Maniküre Dietikon, Pediküre Dietikon, Waxing Dietikon, Wimpernlifting, Körperpeeling',
+        'MERA Cosmetics, Kosmetik Zürich, Maniküre Zürich, Pediküre Zürich, Waxing Zürich, Wimpernlifting, Körperpeeling',
     },
     en: {
-      title: 'MERA Cosmetics in Dietikon',
+      title: 'MERA Cosmetics in Zürich',
       description:
-        'A private retreat for aesthetics, manicure, pedicure, waxing, and body treatments in Dietikon. Book your appointment at MERA Cosmetics.',
+        'A private retreat for aesthetics, manicure, pedicure, waxing, and body treatments in Zürich. Book your appointment at MERA Cosmetics.',
       keywords:
-        'MERA Cosmetics, beauty salon Dietikon, manicure Dietikon, pedicure Dietikon, waxing Dietikon, lash lift, body peeling',
+        'MERA Cosmetics, beauty salon Zürich, manicure Zürich, pedicure Zürich, waxing Zürich, lash lift, body peeling',
     },
     gr: {
-      title: 'MERA Cosmetics στο Dietikon',
+      title: 'MERA Cosmetics στη Ζυρίχη',
       description:
-        'Ένας ιδιωτικός χώρος για αισθητική, μανικιούρ, πεντικιούρ, αποτρίχωση και θεραπείες σώματος στο Dietikon. Κλείσε ραντεβού στη MERA Cosmetics.',
+        'Ένας ιδιωτικός χώρος για αισθητική, μανικιούρ, πεντικιούρ, αποτρίχωση και θεραπείες σώματος στη Ζυρίχη. Κλείσε ραντεβού στη MERA Cosmetics.',
       keywords:
-        'MERA Cosmetics, αισθητικό Dietikon, μανικιούρ, πεντικιούρ, αποτρίχωση, Dietikon',
+        'MERA Cosmetics, αισθητικό Ζυρίχη, μανικιούρ, πεντικιούρ, αποτρίχωση, Ζυρίχη',
     },
   }[locale]
 
@@ -50,9 +50,9 @@ function HomePage({ language }) {
           email: 'info@meracosmetics.ch',
           address: {
             '@type': 'PostalAddress',
-            streetAddress: 'Staffelackerstrasse 11',
-            postalCode: '8953',
-            addressLocality: 'Dietikon',
+            streetAddress: 'Stampfenbachstrasse 151',
+            postalCode: '8006',
+            addressLocality: 'Zürich',
             addressCountry: 'CH',
           },
         }}

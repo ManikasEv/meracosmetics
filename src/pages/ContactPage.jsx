@@ -8,7 +8,7 @@ import logoWatermark from '../assets/Logo.jpeg'
 gsap.registerPlugin(ScrollTrigger)
 
 const MAP_EMBED_SRC =
-  'https://www.google.com/maps?q=MERA%20Cosmetics%20by%20Viviane%20Rovito%20Staffelackerstrasse%2011%20Dietikon&output=embed'
+  'https://www.google.com/maps?q=MERA%20Cosmetics%20by%20Viviane%20Rovito%20Stampfenbachstrasse%20151%208006%20Z%C3%BCrich&output=embed'
 
 const PHONE_TEL = '+41782111503'
 const PHONE_DISPLAY = '+41 78 211 15 03'
@@ -19,21 +19,21 @@ const COPY = {
   de: {
     seoTitle: 'Kontakt',
     seoDescription:
-      'Kontaktiere MERA Cosmetics in Dietikon: Studio, Oeffnungszeiten, WhatsApp, E-Mail und Termin.',
+      'Kontaktiere MERA Cosmetics in Zürich: Studio, Oeffnungszeiten, WhatsApp, E-Mail und Termin.',
     subtitle:
       'Ich freue mich auf dich. Vereinbare jetzt deinen Termin und erlebe einen Moment der Ruhe.',
     title: 'Kontakt',
     studioTag: 'Das Studio',
     studioName: 'MERA Cosmetics by Viviane Rovito',
-    address1: 'Staffelackerstrasse 11',
-    address2: '8953 Dietikon',
+    address1: 'Stampfenbachstrasse 151',
+    address2: '8006 Zürich',
     address3: 'Schweiz',
     hoursTitle: 'Öffnungszeiten',
-    hoursWeekday: 'Montag - Freitag',
+    hoursWeekday: 'Mittwoch - Freitag',
     hoursWeekdayTime: '10:00 - 19:00 Uhr',
     hoursSaturday: 'Samstag',
-    hoursSaturdayTime: '10:00 - 16:00 Uhr',
-    hoursSunday: 'Sonntag',
+    hoursSaturdayTime: '10:00 - 17:00 Uhr',
+    hoursSunday: 'Sonntag - Dienstag',
     hoursSundayTime: 'Geschlossen',
     hoursNote:
       'Termine nach Vereinbarung. Auf Anfrage bieten wir auch Termine ausserhalb der offiziellen Öffnungszeiten an.',
@@ -52,21 +52,21 @@ const COPY = {
   en: {
     seoTitle: 'Contact',
     seoDescription:
-      'Contact MERA Cosmetics in Dietikon: studio, opening hours, WhatsApp, email, and appointments.',
+      'Contact MERA Cosmetics in Zürich: studio, opening hours, WhatsApp, email, and appointments.',
     subtitle:
       'I look forward to meeting you. Book your appointment now and experience a moment of peace.',
     title: 'Contact',
     studioTag: 'The Studio',
     studioName: 'MERA Cosmetics by Viviane Rovito',
-    address1: 'Staffelackerstrasse 11',
-    address2: '8953 Dietikon',
+    address1: 'Stampfenbachstrasse 151',
+    address2: '8006 Zürich',
     address3: 'Switzerland',
     hoursTitle: 'Opening hours',
-    hoursWeekday: 'Monday - Friday',
+    hoursWeekday: 'Wednesday - Friday',
     hoursWeekdayTime: '10:00 - 19:00',
     hoursSaturday: 'Saturday',
-    hoursSaturdayTime: '10:00 - 16:00',
-    hoursSunday: 'Sunday',
+    hoursSaturdayTime: '10:00 - 17:00',
+    hoursSunday: 'Sunday - Tuesday',
     hoursSundayTime: 'Closed',
     hoursNote:
       'By appointment. Upon request, we also offer appointments outside of official opening hours.',
@@ -85,21 +85,21 @@ const COPY = {
   gr: {
     seoTitle: 'Επικοινωνία',
     seoDescription:
-      'Επικοινώνησε με τη MERA Cosmetics στο Dietikon: στούντιο, ώρες, WhatsApp, email και ραντεβού.',
+      'Επικοινώνησε με τη MERA Cosmetics στη Ζυρίχη: στούντιο, ώρες, WhatsApp, email και ραντεβού.',
     subtitle:
       'Χαίρομαι να σε δεχθώ. Κλείσε το ραντεβού σου τώρα και βίωσε μια στιγμή ηρεμίας.',
     title: 'Επικοινωνία',
     studioTag: 'Το Στούντιο',
     studioName: 'MERA Cosmetics by Viviane Rovito',
-    address1: 'Staffelackerstrasse 11',
-    address2: '8953 Dietikon',
+    address1: 'Stampfenbachstrasse 151',
+    address2: '8006 Zürich',
     address3: 'Ελβετία',
     hoursTitle: 'Ωράρια λειτουργίας',
-    hoursWeekday: 'Δευτέρα - Παρασκευή',
+    hoursWeekday: 'Τετάρτη - Παρασκευή',
     hoursWeekdayTime: '10:00 - 19:00',
     hoursSaturday: 'Σάββατο',
-    hoursSaturdayTime: '10:00 - 16:00',
-    hoursSunday: 'Κυριακή',
+    hoursSaturdayTime: '10:00 - 17:00',
+    hoursSunday: 'Κυριακή - Τρίτη',
     hoursSundayTime: 'Κλειστό',
     hoursNote:
       'Με ραντεβού. Κατόπιν αιτήματος, προσφέρουμε επίσης ραντεβού εκτός των επίσημων ωρών λειτουργίας.',
@@ -271,9 +271,9 @@ function ContactPage({ language }) {
             email: EMAIL,
             address: {
               '@type': 'PostalAddress',
-              streetAddress: 'Staffelackerstrasse 11',
-              postalCode: '8953',
-              addressLocality: 'Dietikon',
+              streetAddress: 'Stampfenbachstrasse 151',
+              postalCode: '8006',
+              addressLocality: 'Zürich',
               addressCountry: 'CH',
             },
           },

@@ -25,27 +25,27 @@ const TREATMENT_GROUPS = [
       {
         name: { de: 'Basis Maniküre', en: 'Basic Manicure', gr: 'Βασικό Μανικιούρ' },
         duration: { de: '40 Min', en: '40 Min', gr: '40 Λεπτά' },
-        price: 'CHF 55',
+        price: 'CHF 65',
       },
       {
         name: { de: 'Maniküre mit Nagellack', en: 'Manicure with Nail Polish', gr: 'Μανικιούρ με Βερνίκι' },
         duration: { de: '50 Min', en: '50 Min', gr: '50 Λεπτά' },
-        price: 'CHF 65',
+        price: 'CHF 75',
       },
       {
         name: { de: 'Gellack Maniküre', en: 'Gel Polish Manicure', gr: 'Μανικιούρ με Gel' },
         duration: { de: '60 Min', en: '60 Min', gr: '60 Λεπτά' },
-        price: 'CHF 75',
+        price: 'CHF 85',
       },
       {
         name: { de: 'Gellack Entfernung', en: 'Gel Polish Removal', gr: 'Αφαίρεση Gel' },
         duration: { de: '+10 Min', en: '+10 Min', gr: '+10 Λεπτά' },
-        price: 'CHF 5',
+        price: 'CHF 10',
       },
       {
-        name: { de: 'Hand Peeling', en: 'Hand Peeling', gr: 'Peeling Χεριών' },
+        name: { de: 'Hand Peeling + maske', en: 'Hand Peeling + mask', gr: 'Peeling Χεριών + μάσκα' },
         duration: { de: '+15 Min', en: '+15 Min', gr: '+15 Λεπτά' },
-        price: 'CHF 25',
+        price: 'CHF 35',
       },
     ],
   },
@@ -56,32 +56,32 @@ const TREATMENT_GROUPS = [
       {
         name: { de: 'Basis Pediküre', en: 'Basic Pedicure', gr: 'Βασικό Πεντικιούρ' },
         duration: { de: '50 Min', en: '50 Min', gr: '50 Λεπτά' },
-        price: 'CHF 65',
+        price: 'CHF 75',
       },
       {
         name: { de: 'Pediküre mit Nagellack', en: 'Pedicure with Nail Polish', gr: 'Πεντικιούρ με Βερνίκι' },
         duration: { de: '60 Min', en: '60 Min', gr: '60 Λεπτά' },
-        price: 'CHF 75',
+        price: 'CHF 85',
       },
       {
         name: { de: 'Gellack Pediküre', en: 'Gel Polish Pedicure', gr: 'Πεντικιούρ με Gel' },
         duration: { de: '70 Min', en: '70 Min', gr: '70 Λεπτά' },
-        price: 'CHF 85',
+        price: 'CHF 95',
       },
       {
         name: { de: 'Gellack Entfernung', en: 'Gel Polish Removal', gr: 'Αφαίρεση Gel' },
         duration: { de: '+10 Min', en: '+10 Min', gr: '+10 Λεπτά' },
-        price: 'CHF 5',
+        price: 'CHF 10',
       },
       {
-        name: { de: 'Fuss Peeling', en: 'Foot Peeling', gr: 'Peeling Ποδιών' },
+        name: { de: 'Fuss Peeling + maske', en: 'Foot Peeling + mask', gr: 'Peeling Ποδιών + μάσκα' },
         duration: { de: '+15 Min', en: '+15 Min', gr: '+15 Λεπτά' },
-        price: 'CHF 25',
+        price: 'CHF 35',
       },
       {
         name: { de: 'Fussmassage', en: 'Foot Massage', gr: 'Μασάζ Ποδιών' },
-        duration: { de: '+15 Min', en: '+15 Min', gr: '+15 Λεπτά' },
-        price: 'CHF 15',
+        duration: { de: '+20 Min', en: '+20 Min', gr: '+20 Λεπτά' },
+        price: 'CHF 30',
       },
     ],
   },
@@ -140,7 +140,7 @@ const TREATMENT_GROUPS = [
           {
             name: { de: 'Augenbrauen', en: 'Eyebrows', gr: 'Φρύδια' },
             duration: { de: '15 Min', en: '15 Min', gr: '15 Λεπτά' },
-            price: 'CHF 25',
+            price: 'CHF 35',
           },
           {
             name: { de: 'Oberlippe', en: 'Upper Lip', gr: 'Άνω Χείλος' },
@@ -208,12 +208,12 @@ const TREATMENT_GROUPS = [
       {
         name: { de: 'Wimpern färben', en: 'Lash Tinting', gr: 'Βαφή Βλεφαρίδων' },
         duration: { de: '15 Min', en: '15 Min', gr: '15 Λεπτά' },
-        price: 'CHF 15',
+        price: 'CHF 20',
       },
       {
         name: { de: 'Augenbrauen färben', en: 'Brow Tinting', gr: 'Βαφή Φρυδιών' },
         duration: { de: '15 Min', en: '15 Min', gr: '15 Λεπτά' },
-        price: 'CHF 15',
+        price: 'CHF 20',
       },
       {
         name: { de: 'Augenbrauen waxen & formen', en: 'Brow Waxing & Shaping', gr: 'Αποτρίχωση & Σχηματισμός Φρυδιών' },
@@ -234,21 +234,11 @@ const TREATMENT_GROUPS = [
       {
         name: { de: 'Rückenmassage', en: 'Back Massage', gr: 'Μασάζ Πλάτης' },
         duration: { de: '30 Min', en: '30 Min', gr: '30 Λεπτά' },
-        price: 'CHF 60',
+        price: 'CHF 75',
       },
       {
         name: { de: 'Ganzkörper Massage', en: 'Full Body Massage', gr: 'Μασάζ Ολόκληρου Σώματος' },
         duration: { de: '60 Min', en: '60 Min', gr: '60 Λεπτά' },
-        price: 'CHF 100',
-      },
-      {
-        name: { de: 'Rücken Peeling', en: 'Back Peeling', gr: 'Peeling Πλάτης' },
-        duration: { de: '45 Min', en: '45 Min', gr: '45 Λεπτά' },
-        price: 'CHF 90',
-      },
-      {
-        name: { de: 'Ganzkörper Peeling', en: 'Full Body Peeling', gr: 'Peeling Ολόκληρου Σώματος' },
-        duration: { de: '75 Min', en: '75 Min', gr: '75 Λεπτά' },
         price: 'CHF 140',
       },
     ],
@@ -256,7 +246,7 @@ const TREATMENT_GROUPS = [
 ]
 
 const SEO_KEYWORDS =
-  'Behandlungen Dietikon, Preise Kosmetik, Manikuere, Pedikuere, Waxing, Wimpern faerben, Augenbrauen, Wimpernlifting, Rueckenmassage, Ganzkoerper Massage'
+  'Behandlungen Zürich, Preise Kosmetik, Manikuere, Pedikuere, Waxing, Wimpern faerben, Augenbrauen, Wimpernlifting, Rueckenmassage, Ganzkoerper Massage'
 
 const TREATMENTS_COLUMN_CLASS = 'w-full max-w-md sm:max-w-lg mx-auto'
 
@@ -397,7 +387,7 @@ function TreatmentsPage({ language }) {
       ctaWhatsApp: 'Via WhatsApp buchen',
       seoTitle: 'Behandlungen & Preise',
       seoDescription:
-        'Alle Behandlungen bei MERA Cosmetics: Manikuere, Pedikuere, Waxing, Wimpern & Brauen sowie Koerperbehandlungen mit transparenten Preisen in Dietikon.',
+        'Alle Behandlungen bei MERA Cosmetics: Manikuere, Pedikuere, Waxing, Wimpern & Brauen sowie Koerperbehandlungen mit transparenten Preisen in Zürich.',
     },
     en: {
       title: 'Treatments & Prices',
@@ -419,7 +409,7 @@ function TreatmentsPage({ language }) {
       ctaWhatsApp: 'Book via WhatsApp',
       seoTitle: 'Treatments & Prices',
       seoDescription:
-        'All treatments at MERA Cosmetics: manicure, pedicure, waxing, lashes & brows, and body treatments with transparent pricing in Dietikon.',
+        'All treatments at MERA Cosmetics: manicure, pedicure, waxing, lashes & brows, and body treatments with transparent pricing in Zürich.',
     },
     gr: {
       title: 'Θεραπείες & Τιμές',
@@ -441,7 +431,7 @@ function TreatmentsPage({ language }) {
       ctaWhatsApp: 'Κλείσε μέσω WhatsApp',
       seoTitle: 'Θεραπείες & Τιμές',
       seoDescription:
-        'Όλες οι θεραπείες της MERA Cosmetics: μανικιούρ, πεντικιούρ, αποτρίχωση, βλεφαρίδες & φρύδια και θεραπείες σώματος με καθαρές τιμές στο Dietikon.',
+        'Όλες οι θεραπείες της MERA Cosmetics: μανικιούρ, πεντικιούρ, αποτρίχωση, βλεφαρίδες & φρύδια και θεραπείες σώματος με καθαρές τιμές στη Ζυρίχη.',
     },
   }[locale]
 
@@ -650,13 +640,13 @@ function TreatmentsPage({ language }) {
             name: 'MERA Cosmetics',
             address: {
               '@type': 'PostalAddress',
-              streetAddress: 'Staffelackerstrasse 11',
-              postalCode: '8953',
-              addressLocality: 'Dietikon',
+              streetAddress: 'Stampfenbachstrasse 151',
+              postalCode: '8006',
+              addressLocality: 'Zürich',
               addressCountry: 'CH',
             },
           },
-          areaServed: 'Dietikon, Schweiz',
+          areaServed: 'Zürich, Schweiz',
           hasOfferCatalog: {
             '@type': 'OfferCatalog',
             name: 'Behandlungen und Preise',

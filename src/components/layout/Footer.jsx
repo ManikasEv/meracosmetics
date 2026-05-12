@@ -150,9 +150,9 @@ function Footer({ language }) {
               <div className="space-y-2">
                 <p className="type-subtitle text-[#4A3F35] font-serif italic">MERA Cosmetics</p>
                 <p className="type-text text-[#7A6F65] font-serif opacity-80">
-                  Staffelackerstrasse 11
+                  Stampfenbachstrasse 151
                   <br />
-                  8953 Dietikon, CH
+                  8006 Zürich, CH
                 </p>
               </div>
               <div className="space-y-3">
