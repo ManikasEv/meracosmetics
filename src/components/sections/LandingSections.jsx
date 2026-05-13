@@ -213,11 +213,12 @@ function ProfileSection({ t }) {
                 {t('bio.tag')}
               </span>
 
-              <SplitLetters
-                text={t('bio.title')}
-                as="h3"
-                className="type-subtitle font-serif text-[#3E342C] mb-5 max-w-[24ch] leading-[1.25] md:max-w-[30ch]"
-              />
+              <h3
+                data-reveal-fade
+                className="mb-5 max-w-[34ch] font-serif text-[1.85rem] leading-[1.18] tracking-[-0.01em] text-[#3E342C] md:text-[2.05rem]"
+              >
+                {t('bio.title')}
+              </h3>
 
               <p
                 data-reveal-fade
