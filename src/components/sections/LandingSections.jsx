@@ -128,7 +128,7 @@ function PhilosophySection({ t }) {
         <div className="lg:col-span-6 order-1 lg:order-2">
           <div
             data-reveal-fade
-            className="aspect-[5/6] lg:aspect-[4/5] max-w-[560px] ml-auto overflow-hidden rounded-[1.8rem] lg:rounded-[2.4rem] bg-[#F5EFE7] shadow-sm"
+            className="aspect-[5/6] lg:aspect-[1/1] max-w-[500px] ml-auto overflow-hidden rounded-[1.8rem] lg:rounded-[2.4rem] bg-[#F5EFE7] shadow-sm"
           >
             <img
               src={philosophyImage}

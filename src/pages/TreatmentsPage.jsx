@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { motion } from 'framer-motion'
 import { bookingUrl, whatsappUrl } from '../constants/siteData'
 import Seo from '../components/seo/Seo'
 import { SplitLetters } from '../components/animations/SplitLetters'
@@ -8,238 +9,156 @@ import meraLogoWatermark from '../assets/Logo.jpeg'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const FRESHA_SERVICE_BASE =
+  'https://www.fresha.com/a/mera-cosmetics-by-viviane-rovito-zurich-stampfenbachstrasse-151-hh1nrtim/booking?menu=true&share=true&pId=2775917&dppub=true&employeeId=5075365'
+const FRESHA_SELECTED_ITEMS_STORAGE_KEY = 'mera.fresha.selectedOfferItems'
+
+function freshaServiceUrl(variantId) {
+  return `${FRESHA_SERVICE_BASE}&offerItems=${encodeURIComponent(`sv:${variantId}`)}`
+}
+
+function extractVariantIdFromBookingLink(url) {
+  if (!url) return ''
+  const decoded = decodeURIComponent(url)
+  const match = decoded.match(/offerItems=sv:(\d+)/)
+  return match ? match[1] : ''
+}
+
+function buildFreshaCombinedUrl(variantIds) {
+  if (!variantIds.length) return FRESHA_SERVICE_BASE
+  const offerItems = variantIds.map((id) => `sv:${id}`).join(',')
+  return `${FRESHA_SERVICE_BASE}&offerItems=${encodeURIComponent(offerItems)}`
+}
+
 const CATEGORY_FILTERS = [
   { value: 'all', label: { de: 'ALLE', en: 'ALL', gr: 'ΟΛΑ' } },
-  { value: 'manicure', label: { de: 'MANIKÜRE', en: 'MANICURE', gr: 'ΜΑΝΙΚΙΟΥΡ' } },
-  { value: 'pedicure', label: { de: 'PEDIKÜRE', en: 'PEDICURE', gr: 'ΠΕΝΤΙΚΙΟΥΡ' } },
+  { value: 'facecare', label: { de: 'GESICHTSPFLEGE', en: 'FACIAL CARE', gr: 'ΠΕΡΙΠΟΙΗΣΗ ΠΡΟΣΩΠΟΥ' } },
+  { value: 'mani-pedi', label: { de: 'MANIKÜRE UND PEDIKÜRE', en: 'MANICURE AND PEDICURE', gr: 'ΜΑΝΙΚΙΟΥΡ ΚΑΙ ΠΕΝΤΙΚΙΟΥΡ' } },
   { value: 'waxing', label: { de: 'WAXING', en: 'WAXING', gr: 'ΑΠΟΤΡΙΧΩΣΗ' } },
-  { value: 'lashes', label: { de: 'WIMPERN & BRAUEN', en: 'LASHES & BROWS', gr: 'ΒΛΕΦΑΡΙΔΕΣ & ΦΡΥΔΙΑ' } },
-  { value: 'body', label: { de: 'KÖRPER', en: 'BODY', gr: 'ΣΩΜΑ' } },
+  { value: 'lashes-brows', label: { de: 'WIMPERN & BRAUEN', en: 'LASHES & BROWS', gr: 'ΒΛΕΦΑΡΙΔΕΣ & ΦΡΥΔΙΑ' } },
+  { value: 'relaxation', label: { de: 'ENTSPANNUNG', en: 'RELAXATION', gr: 'ΧΑΛΑΡΩΣΗ' } },
+  { value: 'abo', label: { de: 'ABO', en: 'ABO', gr: 'ABO' } },
 ]
 
 const TREATMENT_GROUPS = [
   {
-    id: 'manicure',
-    category: { de: 'Maniküre', en: 'Manicure', gr: 'Μανικιούρ' },
+    id: 'facecare',
+    category: { de: 'Gesichtspflege', en: 'Facial Care', gr: 'Περιποίηση προσώπου' },
     items: [
+      { name: 'Advanced Repair & Lifting', duration: '1 hr, 30 min', price: 'CHF 155', bookingLink: freshaServiceUrl('27478007') },
+      { name: 'Timeless Alpine Booster', duration: '1 hr, 30 min', price: 'CHF 145', bookingLink: freshaServiceUrl('27477983') },
+      { name: 'Timeless Alpine Boost - Express (30min.)', duration: '45 min', price: 'CHF 95', bookingLink: freshaServiceUrl('27477961') },
+      { name: 'Pollution Defense Detox & Antistress', duration: '1 hr', price: 'CHF 120', bookingLink: freshaServiceUrl('27477936') },
       {
-        name: { de: 'Basis Maniküre', en: 'Basic Manicure', gr: 'Βασικό Μανικιούρ' },
-        duration: { de: '40 Min', en: '40 Min', gr: '40 Λεπτά' },
-        price: 'CHF 65',
-      },
-      {
-        name: { de: 'Maniküre mit Nagellack', en: 'Manicure with Nail Polish', gr: 'Μανικιούρ με Βερνίκι' },
-        duration: { de: '50 Min', en: '50 Min', gr: '50 Λεπτά' },
-        price: 'CHF 75',
-      },
-      {
-        name: { de: 'Gellack Maniküre', en: 'Gel Polish Manicure', gr: 'Μανικιούρ με Gel' },
-        duration: { de: '60 Min', en: '60 Min', gr: '60 Λεπτά' },
+        name: 'Pollution Defense Detox & Antistress- Express (30min.)',
+        duration: '45 min',
         price: 'CHF 85',
+        bookingLink: freshaServiceUrl('27477918'),
       },
+      { name: 'Glacial Hydration Moisture Infusing Treatment', duration: '1 hr', price: 'CHF 110', bookingLink: freshaServiceUrl('27477896') },
       {
-        name: { de: 'Gellack Entfernung', en: 'Gel Polish Removal', gr: 'Αφαίρεση Gel' },
-        duration: { de: '+10 Min', en: '+10 Min', gr: '+10 Λεπτά' },
-        price: 'CHF 10',
-      },
-      {
-        name: { de: 'Hand Peeling + maske', en: 'Hand Peeling + mask', gr: 'Peeling Χεριών + μάσκα' },
-        duration: { de: '+15 Min', en: '+15 Min', gr: '+15 Λεπτά' },
-        price: 'CHF 35',
+        name: 'Glacial Hydration Refresh & Moisturizer - Express (30min.)',
+        duration: '45 min',
+        price: 'CHF 75',
+        bookingLink: freshaServiceUrl('27477859'),
       },
     ],
   },
   {
-    id: 'pedicure',
-    category: { de: 'Pediküre', en: 'Pedicure', gr: 'Πεντικιούρ' },
+    id: 'mani-pedi',
+    category: { de: 'Maniküre und Pediküre', en: 'Manicure and Pedicure', gr: 'Μανικιούρ και Πεντικιούρ' },
     items: [
-      {
-        name: { de: 'Basis Pediküre', en: 'Basic Pedicure', gr: 'Βασικό Πεντικιούρ' },
-        duration: { de: '50 Min', en: '50 Min', gr: '50 Λεπτά' },
-        price: 'CHF 75',
-      },
-      {
-        name: { de: 'Pediküre mit Nagellack', en: 'Pedicure with Nail Polish', gr: 'Πεντικιούρ με Βερνίκι' },
-        duration: { de: '60 Min', en: '60 Min', gr: '60 Λεπτά' },
-        price: 'CHF 85',
-      },
-      {
-        name: { de: 'Gellack Pediküre', en: 'Gel Polish Pedicure', gr: 'Πεντικιούρ με Gel' },
-        duration: { de: '70 Min', en: '70 Min', gr: '70 Λεπτά' },
-        price: 'CHF 95',
-      },
-      {
-        name: { de: 'Gellack Entfernung', en: 'Gel Polish Removal', gr: 'Αφαίρεση Gel' },
-        duration: { de: '+10 Min', en: '+10 Min', gr: '+10 Λεπτά' },
-        price: 'CHF 10',
-      },
-      {
-        name: { de: 'Fuss Peeling + maske', en: 'Foot Peeling + mask', gr: 'Peeling Ποδιών + μάσκα' },
-        duration: { de: '+15 Min', en: '+15 Min', gr: '+15 Λεπτά' },
-        price: 'CHF 35',
-      },
-      {
-        name: { de: 'Fussmassage', en: 'Foot Massage', gr: 'Μασάζ Ποδιών' },
-        duration: { de: '+20 Min', en: '+20 Min', gr: '+20 Λεπτά' },
-        price: 'CHF 30',
-      },
+      { name: 'Gellack Maniküre', duration: '1 hr, 15 min', price: 'CHF 85', bookingLink: freshaServiceUrl('26310941') },
+      { name: 'Gellack Pediküre', duration: '1 hr, 20 min', price: 'CHF 95', bookingLink: freshaServiceUrl('26310957') },
+      { name: 'Maniküre mit Nagellack', duration: '1 hr', price: 'CHF 75', bookingLink: freshaServiceUrl('26310938') },
+      { name: 'Pediküre mit Nagellack', duration: '1 hr, 15 min', price: 'CHF 85', bookingLink: freshaServiceUrl('26310961') },
+      { name: 'Basis Maniküre', duration: '50 min', price: 'CHF 65', bookingLink: freshaServiceUrl('26310935') },
+      { name: 'Basis Pediküre', duration: '1 hr', price: 'CHF 75', bookingLink: freshaServiceUrl('26310951') },
     ],
   },
   {
     id: 'waxing',
     category: { de: 'Waxing', en: 'Waxing', gr: 'Αποτρίχωση' },
-    sections: [
-      {
-        name: { de: 'Beine & Arme', en: 'Legs & Arms', gr: 'Πόδια & Χέρια' },
-        items: [
-          {
-            name: { de: 'Ganze Beine', en: 'Full Legs', gr: 'Ολόκληρα Πόδια' },
-            duration: { de: '45 Min', en: '45 Min', gr: '45 Λεπτά' },
-            price: 'CHF 95',
-          },
-          {
-            name: { de: 'Halbe Beine', en: 'Half Legs', gr: 'Μισά Πόδια' },
-            duration: { de: '30 Min', en: '30 Min', gr: '30 Λεπτά' },
-            price: 'CHF 65',
-          },
-          {
-            name: { de: 'Ganze Arme', en: 'Full Arms', gr: 'Ολόκληρα Χέρια' },
-            duration: { de: '30 Min', en: '30 Min', gr: '30 Λεπτά' },
-            price: 'CHF 65',
-          },
-          {
-            name: { de: 'Halbe Arme', en: 'Half Arms', gr: 'Μισά Χέρια' },
-            duration: { de: '20 Min', en: '20 Min', gr: '20 Λεπτά' },
-            price: 'CHF 35',
-          },
-        ],
-      },
-      {
-        name: { de: 'Intimbereich', en: 'Intimate Area', gr: 'Ευαίσθητη Περιοχή' },
-        items: [
-          {
-            name: { de: 'Bikinizone', en: 'Bikini Line', gr: 'Γραμμή Μπικίνι' },
-            duration: { de: '20 Min', en: '20 Min', gr: '20 Λεπτά' },
-            price: 'CHF 45',
-          },
-          {
-            name: { de: 'Brazilian', en: 'Brazilian', gr: 'Brazilian' },
-            duration: { de: '35 Min', en: '35 Min', gr: '35 Λεπτά' },
-            price: 'CHF 85',
-          },
-          {
-            name: { de: 'Achseln', en: 'Underarms', gr: 'Μασχάλες' },
-            duration: { de: '15 Min', en: '15 Min', gr: '15 Λεπτά' },
-            price: 'CHF 45',
-          },
-        ],
-      },
-      {
-        name: { de: 'Gesicht', en: 'Face', gr: 'Πρόσωπο' },
-        items: [
-          {
-            name: { de: 'Augenbrauen', en: 'Eyebrows', gr: 'Φρύδια' },
-            duration: { de: '15 Min', en: '15 Min', gr: '15 Λεπτά' },
-            price: 'CHF 35',
-          },
-          {
-            name: { de: 'Oberlippe', en: 'Upper Lip', gr: 'Άνω Χείλος' },
-            duration: { de: '10 Min', en: '10 Min', gr: '10 Λεπτά' },
-            price: 'CHF 15',
-          },
-          {
-            name: { de: 'Kinn', en: 'Chin', gr: 'Πηγούνι' },
-            duration: { de: '10 Min', en: '10 Min', gr: '10 Λεπτά' },
-            price: 'CHF 15',
-          },
-          {
-            name: { de: 'Halbes Gesicht', en: 'Half Face', gr: 'Μισό Πρόσωπο' },
-            duration: { de: '20 Min', en: '20 Min', gr: '20 Λεπτά' },
-            price: 'CHF 35',
-          },
-          {
-            name: { de: 'Ganzes Gesicht', en: 'Full Face', gr: 'Ολόκληρο Πρόσωπο' },
-            duration: { de: '30 Min', en: '30 Min', gr: '30 Λεπτά' },
-            price: 'CHF 50',
-          },
-        ],
-      },
-      {
-        name: { de: 'Oberkörper', en: 'Upper Body', gr: 'Άνω Σώμα' },
-        items: [
-          {
-            name: { de: 'Halber Rücken', en: 'Half Back', gr: 'Μισή Πλάτη' },
-            duration: { de: '30 Min', en: '30 Min', gr: '30 Λεπτά' },
-            price: 'CHF 55',
-          },
-          {
-            name: { de: 'Ganzer Rücken', en: 'Full Back', gr: 'Ολόκληρη Πλάτη' },
-            duration: { de: '40 Min', en: '40 Min', gr: '40 Λεπτά' },
-            price: 'CHF 65',
-          },
-          {
-            name: { de: 'Schultern', en: 'Shoulders', gr: 'Ώμοι' },
-            duration: { de: '15 Min', en: '15 Min', gr: '15 Λεπτά' },
-            price: 'CHF 25',
-          },
-          {
-            name: { de: 'Brust', en: 'Chest', gr: 'Στήθος' },
-            duration: { de: '20 Min', en: '20 Min', gr: '20 Λεπτά' },
-            price: 'CHF 30',
-          },
-          {
-            name: { de: 'Bauch', en: 'Stomach', gr: 'Κοιλιά' },
-            duration: { de: '20 Min', en: '20 Min', gr: '20 Λεπτά' },
-            price: 'CHF 40',
-          },
-          {
-            name: { de: 'Ganze Vorderseite', en: 'Full Front Side', gr: 'Ολόκληρο Μπροστινό Μέρος' },
-            duration: { de: '35 Min', en: '35 Min', gr: '35 Λεπτά' },
-            price: 'CHF 60',
-          },
-        ],
-      },
+    items: [
+      { name: 'Waxing - Ganze Beine', duration: '45 min', price: 'CHF 95', bookingLink: freshaServiceUrl('26310966') },
+      { name: 'Waxing - Halbe Beine', duration: '30 min', price: 'CHF 65', bookingLink: freshaServiceUrl('26310972') },
+      { name: 'Waxing - Ganze Arme', duration: '30 min', price: 'CHF 65', bookingLink: freshaServiceUrl('26310977') },
+      { name: 'Waxing - Halbe Arme', duration: '20 min', price: 'CHF 35', bookingLink: freshaServiceUrl('26310983') },
+      { name: 'Waxing - Ganze Vorderseite', duration: '45 min', price: 'CHF 60', bookingLink: freshaServiceUrl('26311060') },
+      { name: 'Waxing - Bauch', duration: '30 min', price: 'CHF 40', bookingLink: freshaServiceUrl('26311052') },
+      { name: 'Waxing - Brust', duration: '20 min', price: 'CHF 30', bookingLink: freshaServiceUrl('26311041') },
+      { name: 'Waxing - Schultern', duration: '15 min', price: 'CHF 25', bookingLink: freshaServiceUrl('26311036') },
+      { name: 'Waxing - Ganzer Rücken', duration: '45 min', price: 'CHF 65', bookingLink: freshaServiceUrl('26311034') },
+      { name: 'Waxing - Halber Rücken', duration: '30 min', price: 'CHF 55', bookingLink: freshaServiceUrl('26311029') },
+      { name: 'Waxing - Ganzes Gesicht', duration: '1 hr', price: 'CHF 50', bookingLink: freshaServiceUrl('26311027') },
+      { name: 'Waxing - Halbes Gesicht', duration: '45 min', price: 'CHF 35', bookingLink: freshaServiceUrl('26311023') },
+      { name: 'Waxing - Kinn', duration: '15 min', price: 'CHF 15', bookingLink: freshaServiceUrl('26311019') },
+      { name: 'Waxing - Oberlippe', duration: '15 min', price: 'CHF 15', bookingLink: freshaServiceUrl('26311014') },
+      { name: 'Waxing - Achseln', duration: '30 min', price: 'CHF 45', bookingLink: freshaServiceUrl('26310995') },
+      { name: 'Waxing - Bikinizone', duration: '20 min', price: 'CHF 45', bookingLink: freshaServiceUrl('26310987') },
+      { name: 'Waxing - Brazilian', duration: '1 hr', price: 'CHF 85', bookingLink: freshaServiceUrl('26310993') },
     ],
   },
   {
-    id: 'lashes',
+    id: 'lashes-brows',
     category: { de: 'Wimpern & Brauen', en: 'Lashes & Brows', gr: 'Βλεφαρίδες & Φρύδια' },
     items: [
-      {
-        name: { de: 'Wimpern färben', en: 'Lash Tinting', gr: 'Βαφή Βλεφαρίδων' },
-        duration: { de: '15 Min', en: '15 Min', gr: '15 Λεπτά' },
-        price: 'CHF 20',
-      },
-      {
-        name: { de: 'Augenbrauen färben', en: 'Brow Tinting', gr: 'Βαφή Φρυδιών' },
-        duration: { de: '15 Min', en: '15 Min', gr: '15 Λεπτά' },
-        price: 'CHF 20',
-      },
-      {
-        name: { de: 'Augenbrauen waxen & formen', en: 'Brow Waxing & Shaping', gr: 'Αποτρίχωση & Σχηματισμός Φρυδιών' },
-        duration: { de: '25 Min', en: '25 Min', gr: '25 Λεπτά' },
-        price: 'CHF 35',
-      },
-      {
-        name: { de: 'Wimpernlifting', en: 'Lash Lifting', gr: 'Lash Lifting' },
-        duration: { de: '60 Min', en: '60 Min', gr: '60 Λεπτά' },
-        price: 'CHF 95',
-      },
+      { name: 'Augenbrauen Waxen & formen', duration: '30 min', price: 'CHF 35', bookingLink: freshaServiceUrl('27478319') },
+      { name: 'Wimpernlifting', duration: '1 hr', price: 'CHF 95', bookingLink: freshaServiceUrl('26311075') },
+      { name: 'Augenbrauen waxen ink. Färben', duration: '45 min', price: 'CHF 45', bookingLink: freshaServiceUrl('26311073') },
+      { name: 'Augenbrauen färben', duration: '20 min', price: 'CHF 20', bookingLink: freshaServiceUrl('26311067') },
+      { name: 'Wimpern färben', duration: '20 min', price: 'CHF 20', bookingLink: freshaServiceUrl('26311065') },
     ],
   },
   {
-    id: 'body',
-    category: { de: 'Körper', en: 'Body', gr: 'Σώμα' },
+    id: 'relaxation',
+    category: { de: 'Entspannung', en: 'Relaxation', gr: 'Χαλάρωση' },
+    items: [
+      { name: 'Rückenmassage', duration: '30 min', price: 'from CHF 75', bookingLink: freshaServiceUrl('26311100') },
+      { name: 'Ganzkörper Massage', duration: '1 hr', price: 'from CHF 140', bookingLink: freshaServiceUrl('26311109') },
+    ],
+  },
+  {
+    id: 'abo',
+    category: { de: 'ABO', en: 'ABO', gr: 'ABO' },
+    groupIntro: "Package/Kur ABO's - ANGEBOT KAUFEN",
     items: [
       {
-        name: { de: 'Rückenmassage', en: 'Back Massage', gr: 'Μασάζ Πλάτης' },
-        duration: { de: '30 Min', en: '30 Min', gr: '30 Λεπτά' },
-        price: 'CHF 75',
+        name: 'Glacial Hydration Moisture Infusing Treatment Package',
+        disableBooking: true,
+        priceLines: ['Express: CHF 191.25 STATT CHF 225', 'Full: CHF 280.50 STATT CHF 330'],
+        details: [
+          'Die Glacial Hydration Refresh & Moisturize-Kur ist eine Kombination aus drei Behandlungen, die idealerweise innerhalb von drei Wochen durchgeführt werden sollten (oder für einen Intensiv-Kick drei Behandlungen pro Woche).',
+          'Um die sichtbaren Ergebnisse dieser Gesichtsbehandlung aufrechtzuerhalten, umfasst die Kur alle vier Produkte der Glacial Hydration Line für die Behandlung zu Hause.',
+        ],
       },
       {
-        name: { de: 'Ganzkörper Massage', en: 'Full Body Massage', gr: 'Μασάζ Ολόκληρου Σώματος' },
-        duration: { de: '60 Min', en: '60 Min', gr: '60 Λεπτά' },
-        price: 'CHF 140',
+        name: 'Pollution Defense Detox & Antistress Package',
+        disableBooking: true,
+        priceLines: ['Express: CHF 216.75 STATT CHF 255', 'Full: CHF 306 STATT CHF 360'],
+        details: [
+          'Die Pollution Defense Detox & Antistress-Kur ist eine Kombination aus drei Behandlungen, die idealerweise innerhalb von drei Wochen durchgeführt werden.',
+          'Um die sichtbaren Ergebnisse dieser Gesichtsbehandlung aufrechtzuerhalten, umfasst die Kur alle fünf Produkte der Pollution Defense Line für die Behandlung zu Hause.',
+        ],
+      },
+      {
+        name: 'Timeless Alpine Booster Package',
+        disableBooking: true,
+        priceLines: ['Express: CHF 242.25 STATT CHF 285', 'Full: CHF 369.75 STATT CHF 435'],
+        details: [
+          'Die Timeless Alpine Booster Kur ist für jeden Hauttyp und jedes Alter geeignet. Für müde Haut in Rekonvaleszenz oder Stress, trockene und reife Haut, die gestrafft oder regeneriert werden muss.',
+          'Die Kur besteht aus drei Behandlungen, die wöchentlich innerhalb von drei Wochen durchgeführt werden sollten.',
+          'Die Kur umfasst die fünf Basisprodukte für eine einfache Behandlung zu Hause, um das optimale Ergebnis zu erhalten. Für beste Ergebnisse mindestens zwei Mal pro Jahr.',
+        ],
+      },
+      {
+        name: 'Advanced Repair & Lifting Package',
+        disableBooking: true,
+        priceLines: ['Full: CHF 395.25 STATT CHF 465'],
+        details: [
+          'Die Advanced Repair & Lifting Kur ist eine Kombination von drei Behandlungen, welche idealerweise während drei Wochen angewendet werden sollte. Für einen intensiven Kick für die Haut sind drei Behandlungen während einer Woche empfohlen.',
+          'Um die erstaunlichen Ergebnisse dieser Gesichtsbehandlung aufrechtzuhalten, enthält dieses Package je ein The g-D Serum und The Mask & Luxury Night Cream für die Behandlung zu Hause - für ein noch intensiveres Ergebnis.',
+        ],
       },
     ],
   },
@@ -249,39 +168,175 @@ const SEO_KEYWORDS =
   'Behandlungen Zürich, Preise Kosmetik, Manikuere, Pedikuere, Waxing, Wimpern faerben, Augenbrauen, Wimpernlifting, Rueckenmassage, Ganzkoerper Massage'
 
 const TREATMENTS_COLUMN_CLASS = 'w-full max-w-md sm:max-w-lg mx-auto'
+const EASE_OUT_SOFT = [0.22, 1, 0.36, 1]
 
-function ServiceListRow({ item, directBookLabel, isLast }) {
+const comboCardVariants = {
+  hidden: { opacity: 0, y: 26, scale: 0.985 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.62, ease: EASE_OUT_SOFT, staggerChildren: 0.08, delayChildren: 0.08 },
+  },
+}
+
+const comboItemVariants = {
+  hidden: { opacity: 0, y: 14 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.46, ease: EASE_OUT_SOFT } },
+}
+
+const comboHeadingVariants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.52, ease: EASE_OUT_SOFT } },
+}
+
+function parseStructuredPrice(priceLabel) {
+  const match = String(priceLabel).replace(',', '.').match(/(\d+(?:\.\d+)?)/)
+  return match ? match[1] : '0'
+}
+
+const SERVICE_NAME_TRANSLATIONS = {
+  'Advanced Repair & Lifting': {
+    en: 'Advanced Repair & Lifting',
+    gr: 'Advanced Repair & Lifting',
+  },
+  'Timeless Alpine Booster': {
+    en: 'Timeless Alpine Booster',
+    gr: 'Timeless Alpine Booster',
+  },
+  'Timeless Alpine Boost - Express (30min.)': {
+    en: 'Timeless Alpine Boost - Express (30min.)',
+    gr: 'Timeless Alpine Boost - Express (30min.)',
+  },
+  'Pollution Defense Detox & Antistress': {
+    en: 'Pollution Defense Detox & Antistress',
+    gr: 'Pollution Defense Detox & Antistress',
+  },
+  'Pollution Defense Detox & Antistress- Express (30min.)': {
+    en: 'Pollution Defense Detox & Antistress - Express (30min.)',
+    gr: 'Pollution Defense Detox & Antistress - Express (30min.)',
+  },
+  'Glacial Hydration Moisture Infusing Treatment': {
+    en: 'Glacial Hydration Moisture Infusing Treatment',
+    gr: 'Glacial Hydration Moisture Infusing Treatment',
+  },
+  'Glacial Hydration Refresh & Moisturizer - Express (30min.)': {
+    en: 'Glacial Hydration Refresh & Moisturizer - Express (30min.)',
+    gr: 'Glacial Hydration Refresh & Moisturizer - Express (30min.)',
+  },
+  'Gellack Maniküre': { en: 'Gel Polish Manicure', gr: 'Μανικιούρ με gel' },
+  'Gellack Pediküre': { en: 'Gel Polish Pedicure', gr: 'Πεντικιούρ με gel' },
+  'Maniküre mit Nagellack': { en: 'Manicure with Nail Polish', gr: 'Μανικιούρ με βερνίκι' },
+  'Pediküre mit Nagellack': { en: 'Pedicure with Nail Polish', gr: 'Πεντικιούρ με βερνίκι' },
+  'Basis Maniküre': { en: 'Basic Manicure', gr: 'Βασικό Μανικιούρ' },
+  'Basis Pediküre': { en: 'Basic Pedicure', gr: 'Βασικό Πεντικιούρ' },
+  'Augenbrauen Waxen & formen': { en: 'Eyebrow Waxing & Shaping', gr: 'Αποτρίχωση και σχήμα φρυδιών' },
+  Wimpernlifting: { en: 'Lash Lifting', gr: 'Ανόρθωση βλεφαρίδων' },
+  'Augenbrauen waxen ink. Färben': { en: 'Eyebrow Waxing incl. Tinting', gr: 'Αποτρίχωση φρυδιών με βαφή' },
+  'Augenbrauen färben': { en: 'Eyebrow Tinting', gr: 'Βαφή φρυδιών' },
+  'Wimpern färben': { en: 'Lash Tinting', gr: 'Βαφή βλεφαρίδων' },
+  Rückenmassage: { en: 'Back Massage', gr: 'Μασάζ πλάτης' },
+  'Ganzkörper Massage': { en: 'Full Body Massage', gr: 'Μασάζ ολόκληρου σώματος' },
+}
+
+const WAXING_SEGMENT_TRANSLATIONS = {
+  'Ganze Beine': { en: 'Full Legs', gr: 'Ολόκληρα πόδια' },
+  'Halbe Beine': { en: 'Half Legs', gr: 'Μισά πόδια' },
+  'Ganze Arme': { en: 'Full Arms', gr: 'Ολόκληρα χέρια' },
+  'Halbe Arme': { en: 'Half Arms', gr: 'Μισά χέρια' },
+  'Ganze Vorderseite': { en: 'Full Front Side', gr: 'Ολόκληρη μπροστινή πλευρά' },
+  Bauch: { en: 'Stomach', gr: 'Κοιλιά' },
+  Brust: { en: 'Chest', gr: 'Στήθος' },
+  Schultern: { en: 'Shoulders', gr: 'Ώμοι' },
+  'Ganzer Rücken': { en: 'Full Back', gr: 'Ολόκληρη πλάτη' },
+  'Halber Rücken': { en: 'Half Back', gr: 'Μισή πλάτη' },
+  'Ganzes Gesicht': { en: 'Full Face', gr: 'Ολόκληρο πρόσωπο' },
+  'Halbes Gesicht': { en: 'Half Face', gr: 'Μισό πρόσωπο' },
+  Kinn: { en: 'Chin', gr: 'Πηγούνι' },
+  Oberlippe: { en: 'Upper Lip', gr: 'Άνω χείλος' },
+  Achseln: { en: 'Underarms', gr: 'Μασχάλες' },
+  Bikinizone: { en: 'Bikini Line', gr: 'Γραμμή μπικίνι' },
+  Brazilian: { en: 'Brazilian', gr: 'Brazilian' },
+}
+
+function translateServiceName(name, locale) {
+  if (locale === 'de') return name
+
+  if (name.startsWith('Waxing - ')) {
+    const segment = name.replace('Waxing - ', '')
+    const translatedSegment = WAXING_SEGMENT_TRANSLATIONS[segment]?.[locale] || segment
+    if (locale === 'en') return `Waxing - ${translatedSegment}`
+    if (locale === 'gr') return `Αποτρίχωση - ${translatedSegment}`
+  }
+
+  return SERVICE_NAME_TRANSLATIONS[name]?.[locale] || name
+}
+
+function ServiceListRow({ item, directBookLabel, onDirectBookClick, isLast }) {
+  const hasBooking = !item.disableBooking && Boolean(item.bookingVariantId || item.effectiveBookingLink)
+  const hasDetails = Array.isArray(item.details) && item.details.length > 0
+  const hasPriceLines = Array.isArray(item.priceLines) && item.priceLines.length > 0
+
   return (
     <article
       className={`group px-4 md:px-6 lg:px-9 py-4 md:py-5 transition-all duration-300 hover:bg-[#FCF8F2] ${isLast ? '' : 'border-b border-[#4A3F35]/8'}`}
     >
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div className="space-y-2">
-          <h4 className="type-subtitle font-serif text-[#4A3F35] transition-colors duration-300 group-hover:text-[#6D5C48]">
+          <h4 className="font-sans text-[1rem] font-medium leading-[1.25] tracking-[0.005em] text-[#4A3F35] transition-colors duration-300 group-hover:text-[#6D5C48] md:text-[1.04rem]">
             {item.name}
           </h4>
-          <p className="type-ui uppercase text-[#7A6F65]">{item.duration}</p>
+          {item.duration ? (
+            <p className="font-sans text-[0.66rem] font-medium uppercase tracking-[0.12em] text-[#7A6F65]">
+              {item.duration}
+            </p>
+          ) : null}
+          {hasPriceLines ? (
+            <div className="space-y-1.5 pt-1">
+              {item.priceLines.map((line, index) => (
+                <p
+                  key={`${item.name}-price-line-${index}`}
+                  className="tabular-nums font-sans text-[0.95rem] font-semibold leading-tight tracking-[0.01em] text-[#5C4A3A]"
+                >
+                  {line}
+                </p>
+              ))}
+            </div>
+          ) : null}
+          {hasDetails ? (
+            <ul className="space-y-2 pt-2 text-[0.86rem] leading-relaxed text-[#6F645A]">
+              {item.details.map((detail, index) => (
+                <li key={`${item.name}-detail-${index}`} className="flex items-start gap-2">
+                  <span className="mt-1 block text-[#8B7355]">-</span>
+                  <span>{detail}</span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </div>
 
-        <div className="flex items-center gap-3 md:gap-5">
-          <span className="shrink-0 type-subtitle font-serif text-[#5C4A3A] leading-none">
-            {item.price}
-          </span>
-          <a
-            href={bookingUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-mera-pill inline-flex min-w-[104px] justify-center rounded-full bg-[#7E6D52] px-5 py-2 type-ui uppercase text-white transition-all duration-300 hover:bg-[#6D5D46] hover:shadow-[0_8px_20px_rgba(74,63,53,0.28)] hover:-translate-y-px active:scale-[0.98]"
-          >
-            {directBookLabel}
-          </a>
-        </div>
+        {hasBooking ? (
+          <div className="flex shrink-0 items-center justify-end gap-3 md:min-w-[245px] md:gap-5">
+            <span className="shrink-0 tabular-nums font-sans text-[0.95rem] font-medium leading-none tracking-[0.01em] text-[#5C4A3A] md:text-[1rem]">
+              {item.price}
+            </span>
+            <a
+              href={item.effectiveBookingLink || bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(event) => onDirectBookClick(event, item)}
+              className="btn-mera-pill inline-flex h-10 w-[136px] shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-[#7E6D52] px-4 py-2 text-center type-ui uppercase text-white transition-all duration-300 hover:bg-[#6D5D46] hover:shadow-[0_8px_20px_rgba(74,63,53,0.28)] hover:-translate-y-px active:scale-[0.98]"
+            >
+              {directBookLabel}
+            </a>
+          </div>
+        ) : null}
       </div>
     </article>
   )
 }
 
-function ServiceListCard({ items, shouldAnimate = false, directBookLabel }) {
+function ServiceListCard({ items, shouldAnimate = false, directBookLabel, onDirectBookClick }) {
   return (
     <div
       data-service-card
@@ -293,6 +348,7 @@ function ServiceListCard({ items, shouldAnimate = false, directBookLabel }) {
           key={`${item.name}-${index}`}
           item={item}
           directBookLabel={directBookLabel}
+          onDirectBookClick={onDirectBookClick}
           isLast={index === items.length - 1}
         />
       ))}
@@ -300,7 +356,7 @@ function ServiceListCard({ items, shouldAnimate = false, directBookLabel }) {
   )
 }
 
-function GroupBlock({ group, showGroupTitle, shouldAnimate, directBookLabel }) {
+function GroupBlock({ group, showGroupTitle, shouldAnimate, directBookLabel, onDirectBookClick }) {
   return (
     <div className="space-y-4">
       {showGroupTitle && (
@@ -308,6 +364,11 @@ function GroupBlock({ group, showGroupTitle, shouldAnimate, directBookLabel }) {
           {group.category}
         </h2>
       )}
+      {group.groupIntro ? (
+        <p data-treatments-block={shouldAnimate ? true : undefined} className="type-ui uppercase text-[#8B7355]">
+          {group.groupIntro}
+        </p>
+      ) : null}
 
       {group.sections ? (
         <div className="space-y-6">
@@ -316,12 +377,22 @@ function GroupBlock({ group, showGroupTitle, shouldAnimate, directBookLabel }) {
               <h3 data-treatments-block={shouldAnimate ? true : undefined} className="type-subtitle font-serif italic text-[#5E5349]">
                 {section.name}
               </h3>
-              <ServiceListCard items={section.items} shouldAnimate={shouldAnimate} directBookLabel={directBookLabel} />
+              <ServiceListCard
+                items={section.items}
+                shouldAnimate={shouldAnimate}
+                directBookLabel={directBookLabel}
+                onDirectBookClick={onDirectBookClick}
+              />
             </div>
           ))}
         </div>
       ) : (
-        <ServiceListCard items={group.items} shouldAnimate={shouldAnimate} directBookLabel={directBookLabel} />
+        <ServiceListCard
+          items={group.items}
+          shouldAnimate={shouldAnimate}
+          directBookLabel={directBookLabel}
+          onDirectBookClick={onDirectBookClick}
+        />
       )}
     </div>
   )
@@ -330,6 +401,18 @@ function GroupBlock({ group, showGroupTitle, shouldAnimate, directBookLabel }) {
 function TreatmentsPage({ language }) {
   const [activeFilter, setActiveFilter] = useState('all')
   const [highlightedFilter, setHighlightedFilter] = useState('all')
+  const [selectedVariantIds, setSelectedVariantIds] = useState(() => {
+    if (typeof window === 'undefined') return []
+    const raw = window.localStorage.getItem(FRESHA_SELECTED_ITEMS_STORAGE_KEY)
+    if (!raw) return []
+    try {
+      const parsed = JSON.parse(raw)
+      if (!Array.isArray(parsed)) return []
+      return parsed.filter((id) => /^\d+$/.test(String(id))).map(String)
+    } catch {
+      return []
+    }
+  })
   const rootRef = useRef(null)
   const listRef = useRef(null)
   const filterTransitionRef = useRef(null)
@@ -442,10 +525,27 @@ function TreatmentsPage({ language }) {
 
   const visibleGroups = useMemo(() => {
     if (activeFilter === 'all') return TREATMENT_GROUPS
-    return TREATMENT_GROUPS.filter((group) => group.id === activeFilter)
+    const filteredGroups = TREATMENT_GROUPS.filter((group) => group.id === activeFilter)
+    // Fail-safe: if a filter state gets out of sync, never render an empty list area.
+    return filteredGroups.length ? filteredGroups : TREATMENT_GROUPS
   }, [activeFilter])
 
   const isAllCategories = activeFilter === 'all'
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.localStorage.setItem(FRESHA_SELECTED_ITEMS_STORAGE_KEY, JSON.stringify(selectedVariantIds))
+  }, [selectedVariantIds])
+
+  function handleDirectBookClick(event, item) {
+    const variantId = item.bookingVariantId
+    if (!variantId) return
+    event.preventDefault()
+    const merged = Array.from(new Set([...selectedVariantIds, variantId]))
+    setSelectedVariantIds(merged)
+    const combinedUrl = buildFreshaCombinedUrl(merged)
+    window.open(combinedUrl, '_blank', 'noopener,noreferrer')
+  }
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -458,7 +558,7 @@ function TreatmentsPage({ language }) {
         delay: 0.05,
       })
 
-      gsap.utils.toArray('[data-treatments-scroll]').forEach((el) => {
+      gsap.utils.toArray('[data-treatments-gsap-scroll]').forEach((el) => {
         gsap.fromTo(
           el,
           { autoAlpha: 0, y: 30 },
@@ -653,27 +753,31 @@ function TreatmentsPage({ language }) {
             itemListElement: TREATMENT_GROUPS.flatMap((group) => {
               if (group.sections) {
                 return group.sections.flatMap((section) =>
-                  section.items.map((item) => ({
+                  section.items
+                    .filter((item) => !item.disableBooking)
+                    .map((item) => ({
                     '@type': 'Offer',
                     itemOffered: {
                       '@type': 'Service',
                       name: `${tr(group.category)} - ${tr(section.name)} - ${tr(item.name)}`,
                     },
-                    price: item.price.replace('CHF ', ''),
+                    price: parseStructuredPrice(item.price),
                     priceCurrency: 'CHF',
                   })),
                 )
               }
 
-              return group.items.map((item) => ({
-                '@type': 'Offer',
-                itemOffered: {
-                  '@type': 'Service',
-                  name: `${tr(group.category)} - ${tr(item.name)}`,
-                },
-                price: item.price.replace('CHF ', ''),
-                priceCurrency: 'CHF',
-              }))
+              return group.items
+                .filter((item) => !item.disableBooking)
+                .map((item) => ({
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Service',
+                    name: `${tr(group.category)} - ${tr(item.name)}`,
+                  },
+                  price: parseStructuredPrice(item.price),
+                  priceCurrency: 'CHF',
+                }))
             }),
           },
         }}
@@ -744,7 +848,10 @@ function TreatmentsPage({ language }) {
       </section>
 
       <section data-treatments-list-wrap className="px-5 lg:px-12 py-8 lg:py-10">
-        <div ref={listRef} className={`${TREATMENTS_COLUMN_CLASS} space-y-8 min-h-[44vh]`}>
+        <div
+          ref={listRef}
+          className={`${TREATMENTS_COLUMN_CLASS} space-y-8 ${visibleGroups.length ? 'min-h-[44vh]' : 'min-h-0'}`}
+        >
           {visibleGroups.map((group) => (
             <GroupBlock
               key={group.id}
@@ -753,34 +860,74 @@ function TreatmentsPage({ language }) {
                 category: tr(group.category),
                 items: group.items?.map((item) => ({
                   ...item,
-                  name: tr(item.name),
+                  name: translateServiceName(item.name, locale),
                   duration: tr(item.duration),
+                  bookingVariantId: extractVariantIdFromBookingLink(item.bookingLink),
+                  effectiveBookingLink: buildFreshaCombinedUrl(
+                    Array.from(
+                      new Set([
+                        ...selectedVariantIds,
+                        extractVariantIdFromBookingLink(item.bookingLink),
+                      ].filter(Boolean)),
+                    ),
+                  ),
                 })),
                 sections: group.sections?.map((section) => ({
                   ...section,
                   name: tr(section.name),
                   items: section.items.map((item) => ({
                     ...item,
-                    name: tr(item.name),
+                    name: translateServiceName(item.name, locale),
                     duration: tr(item.duration),
+                    bookingVariantId: extractVariantIdFromBookingLink(item.bookingLink),
+                    effectiveBookingLink: buildFreshaCombinedUrl(
+                      Array.from(
+                        new Set([
+                          ...selectedVariantIds,
+                          extractVariantIdFromBookingLink(item.bookingLink),
+                        ].filter(Boolean)),
+                      ),
+                    ),
                   })),
                 })),
               }}
-              showGroupTitle={isAllCategories}
-              shouldAnimate={isAllCategories}
+              showGroupTitle
+              shouldAnimate
               directBookLabel={copy.directBook}
+              onDirectBookClick={handleDirectBookClick}
             />
           ))}
+          {!visibleGroups.length && (
+            <p className="type-text text-[#7A6F65] text-center py-4">{copy.combosText}</p>
+          )}
         </div>
       </section>
 
       <section className="px-5 lg:px-12 pb-16 lg:pb-24">
         <div className={`${TREATMENTS_COLUMN_CLASS} text-center`}>
-          <SplitLetters text={copy.combos} as="h2" className="type-title font-serif text-[#4A3F35]" />
-          <span className="mt-3 inline-block h-px w-16 bg-[#4A3F35]/20"></span>
+          <motion.h2
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.7 }}
+            variants={comboHeadingVariants}
+            className="type-title font-serif text-[#4A3F35]"
+          >
+            {copy.combos}
+          </motion.h2>
+          <motion.span
+            initial={{ opacity: 0, scaleX: 0.6 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true, amount: 0.7 }}
+            transition={{ duration: 0.45, ease: EASE_OUT_SOFT, delay: 0.05 }}
+            className="mt-3 inline-block h-px w-16 origin-center bg-[#4A3F35]/20"
+          ></motion.span>
 
-          <div
-            data-treatments-scroll
+          <motion.div
+            key={`combo-card-${locale}`}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.26 }}
+            variants={comboCardVariants}
             className="mt-7 relative isolate min-h-[min(56vh,480px)] md:min-h-[min(52vh,520px)] rounded-[1.7rem] border border-[#4A3F35]/8 bg-[#FAF6EF] px-6 pt-12 pb-28 sm:px-8 sm:pt-14 sm:pb-32 md:px-10 md:pt-16 md:pb-36 lg:pb-40 shadow-[0_18px_40px_rgba(74,63,53,0.11)] overflow-visible flex flex-col justify-center"
           >
             <img
@@ -792,25 +939,29 @@ function TreatmentsPage({ language }) {
               aria-hidden="true"
             />
 
-            <p className="type-subtitle text-[#5E5349] font-serif italic mx-auto relative z-[1]">
+            <motion.p variants={comboItemVariants} className="type-subtitle text-[#5E5349] font-serif italic mx-auto max-w-[34ch] relative z-[1]">
               {copy.combosText}
-            </p>
+            </motion.p>
 
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 w-full relative z-[1]">
+            <motion.div
+              variants={comboItemVariants}
+              className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 w-full items-stretch relative z-[1]"
+            >
               {copy.comboPills.map((pill) => (
-                <span
+                <motion.span
+                  variants={comboItemVariants}
                   key={pill}
-                  className="inline-flex items-center justify-center rounded-full bg-white px-5 py-3.5 type-ui text-[#4A3F35] shadow-[0_3px_12px_rgba(74,63,53,0.08)] transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_8px_22px_rgba(74,63,53,0.12)]"
+                  className="inline-flex min-h-12 items-center justify-center text-center leading-tight rounded-full bg-white px-5 py-3.5 type-ui text-[#4A3F35] shadow-[0_3px_12px_rgba(74,63,53,0.08)] transition-all duration-500 hover:-translate-y-0.5 hover:shadow-[0_8px_22px_rgba(74,63,53,0.12)] whitespace-normal break-words"
                 >
                   {pill}
-                </span>
+                </motion.span>
               ))}
-            </div>
+            </motion.div>
 
-            <p className="mt-12 type-ui uppercase text-[#6B5540] font-medium relative z-[1]">
+            <motion.p variants={comboItemVariants} className="mt-12 type-ui uppercase text-[#6B5540] font-medium relative z-[1]">
               {copy.combosPrice}
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           <div className="mt-14 lg:mt-20 pt-10 lg:pt-14 pb-4 border-t border-[#4A3F35]/10">
             <SplitLetters
@@ -819,7 +970,7 @@ function TreatmentsPage({ language }) {
               className="type-subtitle font-serif text-[#4A3F35]"
             />
             <p className="mt-4 type-text text-[#5E5349] max-w-xl mx-auto">{copy.ctaText}</p>
-            <div data-treatments-scroll className="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <div data-treatments-gsap-scroll className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
               href={bookingUrl}
               target="_blank"

@@ -28,13 +28,13 @@ export const TEXT_TABLE = [
   },
   {
     key: 'concept.text1',
-    de: 'MERA ist ein privater Beratungsraum für Ästhetik, der sich gezielt von der Massenabfertigung abhebt. Ich glaube daran, dass Erholung absolute Ruhe und ungeteilte Aufmerksamkeit erfordert.',
+    de: 'MERA ist ein exklusiver Raum für Schönheit im Herzen von Zürich, der sich bewusst von der Hektik des Alltags abhebt. Ich bin davon überzeugt, dass wahre Erholung absolute Ruhe und ungeteilte Aufmerksamkeit voraussetzt.',
     en: 'MERA is a private aesthetic space that consciously stands apart from mass treatment. I believe relaxation requires absolute calm and undivided attention.',
     gr: 'Το MERA είναι ένας ιδιωτικός χώρος αισθητικής που ξεχωρίζει συνειδητά από τη μαζική εξυπηρέτηση. Πιστεύω πως η αναζωογόνηση χρειάζεται απόλυτη ηρεμία και αμέριστη προσοχή.',
   },
   {
     key: 'concept.text2',
-    de: 'In meinem privaten Beratungsraum in Dietikon begleite ich Sie persönlich auf dem Weg zu Ihrer persönlichen Erholung. Schweizer Präzision trifft hier auf ein tiefes Verständnis für individuelle Bedürfnisse.',
+    de: 'In meinem Studio schaffe ich für Sie ein Umfeld, in dem Sie sich vollkommen entspannen können, während Ihre individuellen Wünsche im Zentrum stehen.',
     en: 'In my private studio in Dietikon, I personally guide you on your path to restoration. Swiss precision meets a deep understanding of individual needs.',
     gr: 'Στον ιδιωτικό μου χώρο στο Dietikon, σε συνοδεύω προσωπικά στην πορεία προς τη δική σου αναζωογόνηση. Η ελβετική ακρίβεια συναντά την κατανόηση των προσωπικών αναγκών.',
   },
@@ -43,13 +43,13 @@ export const TEXT_TABLE = [
   { key: 'philosophy.title', de: 'Meine Philosophie', en: 'My Philosophy', gr: 'Η Φιλοσοφία μου' },
   {
     key: 'philosophy.text1',
-    de: 'MERA ist ein privater Beratungsraum für Ästhetik, der sich gezielt von der Massenabfertigung abhebt. Ich glaube daran, dass Erholung absolute Ruhe und ungeteilte Aufmerksamkeit erfordert.',
+    de: 'Schweizer Präzision trifft bei mir auf ein tiefes Verständnis für Ihre persönlichen Bedürfnisse. Mein Ziel ist es nicht nur, oberflächliche Ergebnisse zu erzielen, sondern Ihre natürliche Ausstrahlung durch massgeschneiderte Behandlungen nachhaltig zu fördern.',
     en: 'MERA is a private aesthetic space that consciously stands apart from mass treatment. I believe relaxation requires absolute calm and undivided attention.',
     gr: 'Το MERA είναι ένας ιδιωτικός χώρος αισθητικής που ξεχωρίζει συνειδητά από τη μαζική εξυπηρέτηση. Πιστεύω πως η αναζωογόνηση χρειάζεται απόλυτη ηρεμία και αμέριστη προσοχή.',
   },
   {
     key: 'philosophy.text2',
-    de: 'In meinem privaten Beratungsraum in Dietikon begleite ich Sie persönlich auf dem Weg zu Ihrer persönlichen Erholung. Schweizer Präzision trifft hier auf ein tiefes Verständnis für individuelle Bedürfnisse.',
+    de: 'Mit Leidenschaft und höchstem Qualitätsanspruch begleite ich Sie in privater Atmosphäre auf dem Weg zu Ihrem ganz eigenen Wohlbefinden.',
     en: 'In my private studio in Dietikon, I personally guide you on your path to restoration. Swiss precision meets a deep understanding of individual needs.',
     gr: 'Στον ιδιωτικό μου χώρο στο Dietikon, σε συνοδεύω προσωπικά στην πορεία προς τη δική σου αναζωογόνηση. Η ελβετική ακρίβεια συναντά την κατανόηση των προσωπικών αναγκών.',
   },

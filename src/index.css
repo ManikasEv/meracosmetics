@@ -1,23 +1,5 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Cormorant Garamond";
-  src: url("https://www.meracosmetics.ch/_woff/v2/CormorantGaramond-Regular_2/CormorantGaramond-Regular_2-english.woff2")
-    format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Cormorant Garamond";
-  src: url("https://www.meracosmetics.ch/_woff/v2/CormorantGaramond-Medium_2/CormorantGaramond-Medium_2-english.woff2")
-    format("woff2");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
 /*
   Four typographic levels — use only these classes sitewide:
   L1 .type-title     — page hero & major section titles (h1, primary h2)
