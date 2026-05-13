@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitLetters } from '../animations/SplitLetters'
 import fadedLogo from '../../assets/Logo.jpeg'
 import heroImage from '../../assets/p1.jpeg'
-import philosophyImage from '../../assets/philosofy.jpeg'
+import philosophyImage from '../../assets/philosophy.jpg'
 import bioConceptImage from '../../assets/profile.jpeg'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -80,12 +80,12 @@ function ConceptSection({ t }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-20 items-start">
           <p
             data-reveal-fade
-            className="type-subtitle text-[#7A6F65] font-serif italic opacity-80"
+            className="type-subtitle text-[#7A6F65] font-serif opacity-80"
           >
             {t('concept.text1')}
           </p>
           <div className="space-y-7">
-            <p data-reveal-fade className="type-text text-[#7A6F65]">
+            <p data-reveal-fade className="type-subtitle text-[#7A6F65] font-serif opacity-80">
               {t('concept.text2')}
             </p>
             <a
