@@ -601,38 +601,40 @@ function TreatmentsPage({ language }) {
     if (!listRef.current) return
     const wrap = listRef.current
     const cards = wrap.querySelectorAll('[data-service-card]')
+    const blocks = wrap.querySelectorAll('[data-treatments-block]')
 
-    gsap.killTweensOf([wrap, ...cards])
+    gsap.killTweensOf([wrap, ...cards, ...blocks])
     gsap.set(wrap, { filter: 'none' })
     cards.forEach((card) => gsap.set(card, { filter: 'none' }))
+    blocks.forEach((block) => gsap.set(block, { filter: 'none' }))
 
     const tl = gsap.timeline({
       onComplete: () => {
         gsap.set(wrap, { filter: 'none', clearProps: 'filter' })
         cards.forEach((card) => gsap.set(card, { clearProps: 'filter' }))
+        blocks.forEach((block) => gsap.set(block, { clearProps: 'filter,transform,opacity' }))
       },
     })
 
     tl.fromTo(
       wrap,
-      { autoAlpha: 0, y: 36, filter: 'blur(12px)', scale: 0.99 },
+      { autoAlpha: 0, y: 28, scale: 0.995 },
       {
         autoAlpha: 1,
         y: 0,
-        filter: 'none',
         scale: 1,
-        duration: 0.58,
+        duration: 0.5,
         ease: 'power3.out',
       },
     )
     tl.fromTo(
       cards,
-      { autoAlpha: 0, y: 22, scale: 0.98 },
+      { autoAlpha: 0, y: 18, scale: 0.99 },
       {
         autoAlpha: 1,
         y: 0,
         scale: 1,
-        duration: 0.52,
+        duration: 0.46,
         stagger: 0.065,
         ease: 'power3.out',
       },
@@ -644,6 +646,9 @@ function TreatmentsPage({ language }) {
       gsap.set(wrap, { autoAlpha: 1, y: 0, scale: 1, filter: 'none', clearProps: 'filter,transform' })
       wrap.querySelectorAll('[data-service-card]').forEach((card) => {
         gsap.set(card, { autoAlpha: 1, y: 0, scale: 1, clearProps: 'filter,transform' })
+      })
+      wrap.querySelectorAll('[data-treatments-block]').forEach((block) => {
+        gsap.set(block, { autoAlpha: 1, y: 0, clearProps: 'filter,transform,opacity' })
       })
     }
   }, [activeFilter, locale])
@@ -688,8 +693,7 @@ function TreatmentsPage({ language }) {
     transition.to(outgoingHeadings, {
       autoAlpha: 0,
       y: -14,
-      filter: 'blur(6px)',
-      duration: 0.32,
+      duration: 0.28,
       stagger: 0.025,
     })
     transition.to(
@@ -698,8 +702,7 @@ function TreatmentsPage({ language }) {
         autoAlpha: 0,
         y: -18,
         scale: 0.985,
-        filter: 'blur(8px)',
-        duration: 0.34,
+        duration: 0.3,
         stagger: 0.035,
       },
       '<0.04',
@@ -709,8 +712,7 @@ function TreatmentsPage({ language }) {
       {
         autoAlpha: 0,
         y: -12,
-        filter: 'blur(10px)',
-        duration: 0.28,
+        duration: 0.24,
       },
       '<0.06',
     )
