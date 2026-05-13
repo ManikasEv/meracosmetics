@@ -107,33 +107,36 @@ function ConceptSection({ t }) {
 function PhilosophySection({ t }) {
   return (
     <section id="philosophie" className="py-16 lg:py-36 px-5 lg:px-12">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-16 items-center">
-        <div className="lg:col-span-6 order-2 lg:order-1">
-          <span
-            data-reveal-fade
-            className="block type-ui uppercase text-[#8B7355] mb-6 font-medium"
-          >
-            {t('philosophy.tag')}
-          </span>
-          <SplitLetters
-            text={t('philosophy.title')}
-            as="h2"
-            className="type-title mb-6 text-[#4A3F35] font-serif"
-          />
-          <div className="space-y-5 type-text text-[#7A6F65] font-serif italic opacity-80">
-            <p data-reveal-fade>{t('philosophy.text1')}</p>
-            <p data-reveal-fade>{t('philosophy.text2')}</p>
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-9 lg:gap-16 items-stretch">
+        <div className="lg:col-span-6 order-2 lg:order-1 flex">
+          <div className="flex h-full w-full flex-col justify-center">
+            <span
+              data-reveal-fade
+              className="block type-ui uppercase text-[#8B7355] mb-6 font-medium"
+            >
+              {t('philosophy.tag')}
+            </span>
+            <SplitLetters
+              text={t('philosophy.title')}
+              as="h2"
+              className="type-title mb-6 text-[#4A3F35] font-serif"
+            />
+            <div className="space-y-5 type-text text-[#7A6F65] font-serif italic opacity-80">
+              <p data-reveal-fade>{t('philosophy.text1')}</p>
+              <p data-reveal-fade>{t('philosophy.text2')}</p>
+            </div>
           </div>
         </div>
         <div className="lg:col-span-6 order-1 lg:order-2">
           <div
             data-reveal-fade
-            className="aspect-[5/6] lg:aspect-[1/1] max-w-[500px] ml-auto overflow-hidden rounded-[1.8rem] lg:rounded-[2.4rem] bg-[#F5EFE7] shadow-sm"
+            className="group relative aspect-[5/6] lg:aspect-[1/1] max-w-[500px] ml-auto overflow-hidden rounded-[1.8rem] lg:rounded-[2.4rem] border border-white/40 bg-[#F5EFE7] shadow-[0_24px_48px_rgba(37,29,21,0.24)] ring-1 ring-[#8B7355]/12 transition-all duration-700 hover:-translate-y-1 hover:shadow-[0_34px_70px_rgba(37,29,21,0.30)]"
           >
+            <div className="pointer-events-none absolute inset-0 z-[1] bg-linear-to-t from-black/18 via-transparent to-white/6 opacity-85 transition-opacity duration-700 group-hover:opacity-100" />
             <img
               src={philosophyImage}
               alt="MERA Studio"
-              className="w-full h-full object-cover object-[center_32%] transition-transform duration-[1400ms] hover:scale-[1.03]"
+              className="h-full w-full object-cover object-[center_32%] transition-transform duration-[1400ms] group-hover:scale-[1.045]"
             />
           </div>
         </div>
