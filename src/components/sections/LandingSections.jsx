@@ -216,7 +216,7 @@ function ProfileSection({ t }) {
               <SplitLetters
                 text={t('bio.title')}
                 as="h3"
-                className="type-subtitle font-serif text-[#3E342C] mb-5 max-w-[14ch]"
+                className="type-subtitle font-serif text-[#3E342C] mb-5 max-w-[24ch] leading-[1.25] md:max-w-[30ch]"
               />
 
               <p
