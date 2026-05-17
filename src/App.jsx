@@ -6,6 +6,7 @@ import WhatsAppButton from './components/layout/WhatsAppButton'
 import AboutPage from './pages/AboutPage'
 import ContactPage from './pages/ContactPage'
 import HomePage from './pages/HomePage'
+import ProductsPage from './pages/ProductsPage'
 import TreatmentsPage from './pages/TreatmentsPage'
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage language={language} />} />
         <Route path="/behandlungen" element={<TreatmentsPage language={language} />} />
+        <Route path="/products" element={<ProductsPage language={language} />} />
         <Route path="/uber-mera" element={<AboutPage language={language} />} />
         <Route path="/kontakt" element={<ContactPage language={language} />} />
       </Routes>

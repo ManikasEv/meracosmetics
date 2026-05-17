@@ -10,6 +10,7 @@ export const whatsappUrl =
 export const navLinks = [
   { href: '/', key: 'home' },
   { href: '/behandlungen', key: 'treatments' },
+  { href: '/products', key: 'products' },
   { href: '/uber-mera', key: 'about' },
   { href: '/kontakt', key: 'contact' },
 ]

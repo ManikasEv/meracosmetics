@@ -7,6 +7,7 @@ export const LANGUAGES = [
 export const TEXT_TABLE = [
   { key: 'nav.home', de: 'Home', en: 'Home', gr: 'Αρχική' },
   { key: 'nav.treatments', de: 'Behandlungen', en: 'Treatments', gr: 'Θεραπείες' },
+  { key: 'nav.products', de: 'Products', en: 'Products', gr: 'Products' },
   { key: 'nav.about', de: 'Über MERA', en: 'About MERA', gr: 'Σχετικά με MERA' },
   { key: 'nav.contact', de: 'Kontakt', en: 'Contact', gr: 'Επικοινωνία' },
   { key: 'nav.book', de: 'Termin buchen', en: 'Book now', gr: 'Κλείσε ραντεβού' },
