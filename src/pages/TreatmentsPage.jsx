@@ -114,8 +114,8 @@ const TREATMENT_GROUPS = [
     id: 'relaxation',
     category: { de: 'Entspannung', en: 'Relaxation', gr: 'Χαλάρωση' },
     items: [
-      { name: 'Rückenmassage', duration: '30 min', price: 'from CHF 75', bookingLink: freshaServiceUrl('26311100') },
-      { name: 'Ganzkörper Massage', duration: '1 hr', price: 'from CHF 140', bookingLink: freshaServiceUrl('26311109') },
+      { name: 'Rückenmassage', duration: '30 min', price: 'from CHF 85', bookingLink: freshaServiceUrl('26311100') },
+      { name: 'Ganzkörper Massage', duration: '1 hr', price: 'from CHF 150', bookingLink: freshaServiceUrl('26311109') },
     ],
   },
   {
