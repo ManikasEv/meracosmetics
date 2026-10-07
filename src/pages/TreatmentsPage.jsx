@@ -11,8 +11,6 @@ gsap.registerPlugin(ScrollTrigger)
 
 const FRESHA_SERVICE_BASE =
   'https://www.fresha.com/a/mera-cosmetics-by-viviane-rovito-zurich-stampfenbachstrasse-151-hh1nrtim/booking?menu=true&share=true&pId=2775917&dppub=true&employeeId=5075365'
-const FRESHA_SELECTED_ITEMS_STORAGE_KEY = 'mera.fresha.selectedOfferItems'
-
 function freshaServiceUrl(variantId) {
   return `${FRESHA_SERVICE_BASE}&offerItems=${encodeURIComponent(`sv:${variantId}`)}`
 }
@@ -401,18 +399,7 @@ function GroupBlock({ group, showGroupTitle, shouldAnimate, directBookLabel, onD
 function TreatmentsPage({ language }) {
   const [activeFilter, setActiveFilter] = useState('all')
   const [highlightedFilter, setHighlightedFilter] = useState('all')
-  const [selectedVariantIds, setSelectedVariantIds] = useState(() => {
-    if (typeof window === 'undefined') return []
-    const raw = window.localStorage.getItem(FRESHA_SELECTED_ITEMS_STORAGE_KEY)
-    if (!raw) return []
-    try {
-      const parsed = JSON.parse(raw)
-      if (!Array.isArray(parsed)) return []
-      return parsed.filter((id) => /^\d+$/.test(String(id))).map(String)
-    } catch {
-      return []
-    }
-  })
+  const [selectedVariantIds, setSelectedVariantIds] = useState([])
   const rootRef = useRef(null)
   const listRef = useRef(null)
   const filterTransitionRef = useRef(null)
@@ -531,11 +518,6 @@ function TreatmentsPage({ language }) {
   }, [activeFilter])
 
   const isAllCategories = activeFilter === 'all'
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    window.localStorage.setItem(FRESHA_SELECTED_ITEMS_STORAGE_KEY, JSON.stringify(selectedVariantIds))
-  }, [selectedVariantIds])
 
   function handleDirectBookClick(event, item) {
     const variantId = item.bookingVariantId
